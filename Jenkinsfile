@@ -16,8 +16,8 @@ pipeline {
 
         stage('Set up Python environment') {
             steps {
-                // Install Python dependencies
                 script {
+                    // Install Python dependencies
                     sh "python3 -m pip install --upgrade pip"
                     sh "python3 -m pip install -r requirements.txt"
                     sh "python3 -m pip install pytest-html"
@@ -28,7 +28,7 @@ pipeline {
         stage('Create Pip Cache Directory') {
             steps {
                 script {
-                    // Create a cache directory for Python packages
+                    // Create a cache directory for Python packages if it doesn't exist
                     sh "mkdir -p .pip_cache || echo 'Cache directory already exists'"
                 }
             }
@@ -37,7 +37,7 @@ pipeline {
         stage('Install Playwright Browsers') {
             steps {
                 script {
-                    // Install Playwright browsers with dependencies
+                    // Install Playwright browsers along with required dependencies
                     sh "python3 -m playwright install --with-deps"
                 }
             }
