@@ -13,10 +13,9 @@ def handle_iphone(page):
     Handle actions related to iPhone 16 Pro Max.has_text="256GB Footnote ² From $1099"
     """
     logger.info("Handling iPhone 16 Pro Max actions.")
-    page.wait_for_timeout(5000)
-    # page.wait_for_timeout(10000)
+    page.wait_for_timeout(10000)
     # page.locator("section").filter(has_text="iPhone 16 Pro Hello, Apple").get_by_label("Buy iPhone 16 Pro").click()
-    page.locator("section:has-text('iPhone 16 Pro Hello, Apple')").locator('a[aria-label="Buy iPhone 16 Pro"]').nth(0).click()
+    page.locator("section:has-text('iPhone 16 Pro Hello, Apple')").locator('a[aria-label="Buy iPhone 16 Pro"]').nth(0).click(timeout=60000)
     page.locator("label").filter(has_text="iPhone 16 Pro 6.3-inch").click()
     page.locator("label").filter(has_text="Desert Titanium").locator("img").click()
     page.locator("label").filter(has_text="256GB Footnote ² From $1099").click()

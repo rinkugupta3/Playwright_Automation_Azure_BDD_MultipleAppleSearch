@@ -28,7 +28,7 @@ Key Features:
 
 # Headless mode is set to True and test will run across multiple browsers (Chromium, Firefox, WebKit)
 # pytest -s -v tests/test_parameter_apple_search_module.py
-# pytest -s -v tests/test_parameter_apple_search_module.py --html=report.html
+# pytest -s -v tests/test_parameter_apple_search_module.py --html=report_playwright_bdd.html
 
 
 import logging
