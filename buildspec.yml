@@ -1,0 +1,51 @@
+# AWS CodeBuild buildspec.yml
+
+version: 0.2
+env:
+  variables:
+    HEADLESS: "true"
+    PIP_CACHE: "/root/.cache/pip"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      # Install system dependencies for Playwright
+      - apt-get update
+      - apt-get install -y wget unzip fontconfig libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev
+      # Create Pip Cache Directory
+      - mkdir -p $PIP_CACHE
+      # Install Python dependencies
+      - python -m pip install --upgrade pip
+      - pip install -r requirements.txt
+      - pip install pytest-html
+      # Install Playwright with system dependencies
+      - PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright
+      - python -m playwright install --with-deps chromium
+
+  build:
+    commands:
+      # Run Playwright BDD Tests
+      - export HEADLESS=true
+      - pytest --html=report_playwright_bdd.html --maxfail=3 --disable-warnings -v
+
+  post_build:
+    commands:
+      # Prepare artifacts
+      - mkdir -p artifacts
+      - cp report_playwright_bdd.html artifacts/
+      - mkdir -p artifacts/screenshots
+      - cp -r screenshots/* artifacts/screenshots/ || true
+
+artifacts:
+  files:
+    - report_playwright_bdd.html
+    - screenshots/**/*
+  name: test-reports
+  discard-paths: no
+
+cache:
+  paths:
+    - '/root/.cache/pip/**/*'
+    - '/root/.cache/ms-playwright/**/*'

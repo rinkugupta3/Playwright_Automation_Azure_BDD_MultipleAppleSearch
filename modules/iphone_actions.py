@@ -13,7 +13,7 @@ def handle_iphone(page):
     logger.info("Handling iPhone 16 Pro Max actions.")
     """Click iphone buy button"""
     page.wait_for_timeout(10000)
-    page.get_by_role('link', name='Buy iPhone 16 Pro').nth(2).click(timeout=60000)
+    page.get_by_role('link', name='Buy iPhone 16 Pro').nth(2).click(timeout=120000)
 
     # page.locator("section").filter(has_text="iPhone 16 Pro Hello, Apple").get_by_label("Buy iPhone 16 Pro").click()
     # page.locator("section:has-text('iPhone 16 Pro Hello, Apple')").locator('a[aria-label="Buy iPhone 16 Pro"]')\
