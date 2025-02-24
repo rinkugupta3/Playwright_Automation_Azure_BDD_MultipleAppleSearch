@@ -1,0 +1,39 @@
+# Install Phase: Installs dependencies and sets up the environment for testing.
+# Pre-Build Phase: Prepares the environment for running tests.
+# Build Phase: Runs the tests and generates test reports.
+# Artifacts: Specifies the files to be included in the output artifacts.
+# Cache: Specifies paths to be cached for faster builds.
+
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Installing test dependencies..."
+      - python -m pip install --upgrade pip
+      - pip install pytest-html
+      - PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright
+      - python -m playwright install --with-deps chromium
+
+  pre_build:
+    commands:
+      - echo "Preparing for tests..."
+      - export HEADLESS=true
+
+  build:
+    commands:
+      - echo "Running tests..."
+      - pytest -s -v tests/test_parameter_apple_search_module.py --html=report_playwright_bdd.html --maxfail=3 --disable-warnings -v
+      - cp report_playwright_bdd.html artifacts/
+
+artifacts:
+  files:
+    - artifacts/report_playwright_bdd.html
+    - screenshots/**/*
+  discard-paths: no
+
+cache:
+  paths:
+    - '/root/.cache/pip/**/*'

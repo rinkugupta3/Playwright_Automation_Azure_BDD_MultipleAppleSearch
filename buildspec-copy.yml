@@ -1,8 +1,7 @@
-# Install Phase: Installs dependencies and sets up the environment.
-# Pre-Build Phase: Prepares the environment for the build process.
-# Build Phase: Focuses on building the application and creating artifacts.
-# Artifacts: Specifies the files to be included in the output artifacts.
-# Cache: Specifies paths to be cached for faster builds.
+# AWS CodeBuild buildspec.yml will run test stage as configured in post-build
+# NOT to run test stage in buildspec.yml file and then:
+# remove "post_build"
+# artifacts remove path and add - '**/*'
 
 version: 0.2
 
@@ -31,9 +30,17 @@ phases:
       - # Add build commands here, such as creating artifacts
       - echo "Build completed successfully."
 
+  post_build:
+    commands:
+      - echo "Running tests..."
+      - export HEADLESS=true
+      - pytest -s -v tests/test_parameter_apple_search_module.py --html=report_playwright_bdd.html --maxfail=3 --disable-warnings -v
+      - cp report_playwright_bdd.html artifacts/
+
 artifacts:
   files:
-    - '**/*'
+    - artifacts/report_playwright_bdd.html
+    - screenshots/**/*
   discard-paths: no
 
 cache:
